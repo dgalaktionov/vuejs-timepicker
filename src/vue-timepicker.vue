@@ -57,8 +57,7 @@ export default {
 
   data () {
     return {
-      showDropdown: false,
-      input: null,
+      showDropdown: false
     }
   },
 
@@ -207,34 +206,6 @@ export default {
       }
     },
 
-    onHourSelect (value) {
-      this.$emit('input', {
-        ...this.value,
-        [this.hourType]: value
-      })
-    },
-
-    onMinuteSelect (value) {
-      this.$emit('input', {
-        ...this.value,
-        [this.minuteType]: value
-      })
-    },
-
-    onSecondSelect (value) {
-      this.$emit('input', {
-        ...this.value,
-        [this.secondType]: value
-      })
-    },
-
-    onApmSelect (value) {
-      this.$emit('input', {
-        ...this.value,
-        [this.apmType]: value
-      })
-    },
-
     clearTime () {
       let time = {}
 
@@ -244,68 +215,19 @@ export default {
 
       this.apm = this.apms[0]
       this.$emit('input', time)
-    },
-
-    parseTypedTime (event) {
-      // hide dropdown if enter or esc are pressed
-      if ([13,27].includes(event.keyCode) && this.showDropdown) {
-        this.toggleDropdown();
-      }
-
-      if (this.typeable) {
-        let timeStr = this.input.value;
-        let timeStrNoSpace = timeStr.replace(/ /g, '').toLowerCase();
-        let timeRE = /(\d+):(\d+)(:(\d+))?(am|pm)?/;
-        let timeMatch = timeRE.exec(timeStrNoSpace);
-
-        if (timeMatch && timeMatch.length > 2 && timeMatch[1] && timeMatch[2]) {
-          this.value[this.hourType] = timeMatch[1];
-          this.value[this.minuteType] = timeMatch[2];
-
-          if (timeMatch.length > 4 && timeMatch[4] && this.secondType) {
-            this.value[this.secondType] = timeMatch[4];
-          }
-
-          if (timeMatch.length > 5 && timeMatch[5]) {
-            if (this.apmType) {
-              this.value[this.apmType] = timeMatch[5];
-            }
-
-            // Convert the hour to AM format if needed
-            if (timeMatch[5] === "am") {
-              var hour = Number(timeMatch[1]) % 12;
-
-              if (hour === 0) {
-                hour = 12;
-              }
-
-              this.value[this.hourType] = String(hour);
-            }
-          }
-
-          this.$emit('input', this.value)
-        } else {
-          // do nothing - incomplete input
-        }
-      }
-    },
-  },
-
-  mounted() {
-    this.input = this.$el.querySelector("input");
+    }
   }
 }
 </script>
 
 <template>
 <span class="time-picker">
-  <input class="display-time" :readonly="!typeable" :disabled="disabled" :value="displayTime" @click.stop="toggleDropdown"
-         @keyup="parseTypedTime" type="text" />
+  <input class="display-time" :readonly="!disabled" :disabled="disabled" :value="displayTime" @click.stop="toggleDropdown" type="text" />
   <span class="clear-btn" v-if="!hideClearButton" v-show="!showDropdown && showClearBtn" @click.stop="clearTime">&times;</span>
   <div class="time-picker-overlay" v-if="showDropdown" @click.stop="toggleDropdown"></div>
   <div class="dropdown" v-show="showDropdown">
     <div class="select-list">
-      <select v-model="value[hourType]">
+      <select v-model="value[hourType]" @change="$emit('input', value)">
         <option disabled v-text="hourType" value="" class="hint"></option>
         <option
                 v-for="hr in hours"
@@ -315,7 +237,7 @@ export default {
 
         </option>
       </select>
-      <select class="minutes" v-model="value[minuteType]">
+      <select class="minutes" v-model="value[minuteType]" @change="$emit('input', value)">
         <option disabled v-text="minuteType" value="" class="hint"></option>
         <option
                 v-for="m in minutes"
@@ -325,7 +247,7 @@ export default {
 
         </option>
       </select>
-      <select class="seconds" v-model="value[secondType]" v-if="secondType">
+      <select class="seconds" v-model="value[secondType]" v-if="secondType" @change="$emit('input', value)">
         <option disabled v-text="secondType" value="" class="hint"></option>
         <option
                 v-for="s in seconds"
@@ -335,7 +257,7 @@ export default {
 
         </option>
       </select>
-      <select class="apms" v-model="value[apmType]" v-if="apmType">
+      <select class="apms" v-model="value[apmType]" v-if="apmType" @change="$emit('input', value)">
         <option disabled v-text="apmType" value="" class="hint"></option>
         <option
                 v-for="a in apms"
