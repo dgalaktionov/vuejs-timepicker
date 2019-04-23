@@ -282,6 +282,8 @@ export default {
               this.value[this.hourType] = String(hour);
             }
           }
+
+          this.$emit('input', this.value)
         } else {
           // do nothing - incomplete input
         }
