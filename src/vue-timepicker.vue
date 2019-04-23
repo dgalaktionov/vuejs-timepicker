@@ -254,12 +254,9 @@ export default {
 
       if (this.typeable) {
         let timeStr = this.input.value;
-        console.log(timeStr);
         let timeStrNoSpace = timeStr.replace(/ /g, '').toLowerCase();
-        console.log(timeStrNoSpace);
         let timeRE = /(\d+):(\d+)(:(\d+))?(am|pm)?/;
         let timeMatch = timeRE.exec(timeStrNoSpace);
-        console.log(timeMatch);
 
         if (timeMatch && timeMatch.length > 2 && timeMatch[1] && timeMatch[2]) {
           this.value[this.hourType] = timeMatch[1];
@@ -288,8 +285,6 @@ export default {
         } else {
           // do nothing - incomplete input
         }
-
-        console.log(this.value);
       }
     },
   },
