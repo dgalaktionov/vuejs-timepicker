@@ -47,6 +47,7 @@ export default {
     },
 
     disabled: { type: Boolean },
+    typeable: { type: Boolean, default: false },
 
     disabledValues: {
       type: Object,
@@ -57,6 +58,7 @@ export default {
   data () {
     return {
       showDropdown: false,
+      input: null,
     }
   },
 
@@ -242,14 +244,66 @@ export default {
 
       this.apm = this.apms[0]
       this.$emit('input', time)
-    }
+    },
+
+    parseTypedTime (event) {
+      // hide dropdown if enter or esc are pressed
+      if ([13,27].includes(event.keyCode) && this.showDropdown) {
+        this.toggleDropdown();
+      }
+
+      if (this.typeable) {
+        let timeStr = this.input.value;
+        console.log(timeStr);
+        let timeStrNoSpace = timeStr.replace(/ /g, '').toLowerCase();
+        console.log(timeStrNoSpace);
+        let timeRE = /(\d+):(\d+)(:(\d+))?(am|pm)?/;
+        let timeMatch = timeRE.exec(timeStrNoSpace);
+        console.log(timeMatch);
+
+        if (timeMatch && timeMatch.length > 2 && timeMatch[1] && timeMatch[2]) {
+          this.value[this.hourType] = timeMatch[1];
+          this.value[this.minuteType] = timeMatch[2];
+
+          if (timeMatch.length > 4 && timeMatch[4] && this.secondType) {
+            this.value[this.secondType] = timeMatch[4];
+          }
+
+          if (timeMatch.length > 5 && timeMatch[5]) {
+            if (this.apmType) {
+              this.value[this.apmType] = timeMatch[5];
+            }
+
+            // Convert the hour to AM format if needed
+            if (timeMatch[5] === "am") {
+              var hour = Number(timeMatch[1]) % 12;
+
+              if (hour === 0) {
+                hour = 12;
+              }
+
+              this.value[this.hourType] = String(hour);
+            }
+          }
+        } else {
+          // do nothing - incomplete input
+        }
+
+        console.log(this.value);
+      }
+    },
+  },
+
+  mounted() {
+    this.input = this.$el.querySelector("input");
   }
 }
 </script>
 
 <template>
 <span class="time-picker">
-  <input class="display-time" :readonly="!disabled" :disabled="disabled" :value="displayTime" @click.stop="toggleDropdown" type="text" />
+  <input class="display-time" :readonly="!typeable" :disabled="disabled" :value="displayTime" @click.stop="toggleDropdown"
+         @keyup="parseTypedTime" type="text" />
   <span class="clear-btn" v-if="!hideClearButton" v-show="!showDropdown && showClearBtn" @click.stop="clearTime">&times;</span>
   <div class="time-picker-overlay" v-if="showDropdown" @click.stop="toggleDropdown"></div>
   <div class="dropdown" v-show="showDropdown">
