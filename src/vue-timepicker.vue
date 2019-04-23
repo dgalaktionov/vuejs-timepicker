@@ -305,42 +305,46 @@ export default {
   <div class="time-picker-overlay" v-if="showDropdown" @click.stop="toggleDropdown"></div>
   <div class="dropdown" v-show="showDropdown">
     <div class="select-list">
-      <ul class="hours">
-        <li class="hint" v-text="hourType"></li>
-        <li
-          v-for="hr in hours"
-          v-text="hr"
-          v-show="disabledValues.hour.indexOf(hr) === -1"
-          :class="{active: value[hourType] === hr}"
-          @click.stop="onHourSelect(hr)"></li>
-      </ul>
-      <ul class="minutes">
-        <li class="hint" v-text="minuteType"></li>
-        <li
-          v-for="m in minutes"
-          v-text="m"
-          v-show="disabledValues.minute.indexOf(m) === -1"
-          :class="{active: value[minuteType] === m}"
-          @click.stop="onMinuteSelect(m)"></li>
-      </ul>
-      <ul class="seconds" v-if="secondType">
-        <li class="hint" v-text="secondType"></li>
-        <li
-          v-for="s in seconds"
-          v-text="s"
-          v-show="disabledValues.second.indexOf(s) === -1"
-          :class="{active: value[secondType] === s}"
-          @click.stop="onSecondSelect(s)"></li>
-      </ul>
-      <ul class="apms" v-if="apmType">
-        <li class="hint" v-text="apmType"></li>
-        <li
-          v-for="a in apms"
-          v-text="a"
-          v-show="disabledValues.apm.indexOf(a) === -1"
-          :class="{active: value[apmType] === a}"
-          @click.stop="onApmSelect(a)"></li>
-      </ul>
+      <select v-model="value[hourType]">
+        <option disabled v-text="hourType" value="" class="hint"></option>
+        <option
+                v-for="hr in hours"
+                v-text="hr"
+                v-show="disabledValues.hour.indexOf(hr) === -1"
+                :class="{active: value[hourType] === hr}">
+
+        </option>
+      </select>
+      <select class="minutes" v-model="value[minuteType]">
+        <option disabled v-text="minuteType" value="" class="hint"></option>
+        <option
+                v-for="m in minutes"
+                v-text="m"
+                v-show="disabledValues.minute.indexOf(m) === -1"
+                :class="{active: value[minuteType] === m}">
+
+        </option>
+      </select>
+      <select class="seconds" v-model="value[secondType]" v-if="secondType">
+        <option disabled v-text="secondType" value="" class="hint"></option>
+        <option
+                v-for="s in seconds"
+                v-text="s"
+                v-show="disabledValues.second.indexOf(s) === -1"
+                :class="{active: value[secondType] === s}">
+
+        </option>
+      </select>
+      <select class="apms" v-model="value[apmType]" v-if="apmType">
+        <option disabled v-text="apmType" value="" class="hint"></option>
+        <option
+                v-for="a in apms"
+                v-text="a"
+                v-show="disabledValues.apm.indexOf(a) === -1"
+                :class="{active: value[apmType] === a}">
+
+        </option>
+      </select>
     </div>
   </div>
 </span>

@@ -65,13 +65,11 @@
   background: #fff;
   box-shadow: 0 1px 6px rgba(0,0,0,0.15);
   width: 10em;
-  height: 10em;
   font-weight: normal;
 }
 
 .time-picker .dropdown .select-list {
   width: 10em;
-  height: 10em;
   overflow: hidden;
   display: flex;
   flex-flow: row nowrap;
@@ -79,36 +77,29 @@
   justify-content: space-between;
 }
 
-.time-picker .dropdown ul {
+.time-picker .dropdown select {
   padding: 0;
   margin: 0;
-  list-style: none;
 
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-.time-picker .dropdown ul.minutes,
-.time-picker .dropdown ul.seconds,
-.time-picker .dropdown ul.apms{
-  border-left: 1px solid #fff;
-}
-
-.time-picker .dropdown ul li {
+.time-picker .dropdown select option {
   text-align: center;
   padding: 0.3em 0;
   color: #161616;
 }
 
-.time-picker .dropdown ul li:not(.hint):hover {
+.time-picker .dropdown select option:not(.hint):hover {
   background: rgba(0,0,0,.08);
   color: #161616;
   cursor: pointer;
 }
 
-.time-picker .dropdown ul li.active,
-.time-picker .dropdown ul li.active:hover {
+.time-picker .dropdown select option.active,
+.time-picker .dropdown select option.active:hover {
   background: #41B883;
   color: #fff;
 }
