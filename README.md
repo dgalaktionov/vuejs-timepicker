@@ -135,11 +135,6 @@ VueTimepicker will recognizes the following tokens in the format string
 <vue-timepicker hide-clear-button></vue-timepicker>
 ```
 
-### Make Input Editable As Text
-```html
-<vue-timepicker typeable></vue-timepicker>
-```
-
 ### Bind Value with `v-model`
 
 ```javascript

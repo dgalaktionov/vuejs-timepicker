@@ -45,7 +45,6 @@ export default {
       },
 
       enableClearBtn: true,
-      typeableBtn: false,
 
       playgroundData: {},
 
@@ -318,18 +317,6 @@ export default {
         </div>
       </div>
 
-      <div class="config-block">
-        <h3 class="subtitle"><a class="anchor">#</a>Typeable</h3>
-        <div class="config-row group">
-          <label for="typeable_btn_true">
-            <input v-model="typeableBtn" type="radio" id="typeable_btn_true" name="typeable_btn" :value="true" /> Enable
-          </label>
-          <label for="typeable_btn_false">
-            <input v-model="typeableBtn" type="radio" id="typeable_btn_false" name="typeable_btn" :value="false" /> Disable
-          </label>
-        </div>
-      </div>
-
       <div class="config-block" id="valuesSelection">
         <h3 class="subtitle"><a class="anchor">#</a>Set <code>v-model</code> data</h3>
         <div class="config-row">
@@ -373,7 +360,7 @@ export default {
       <span v-text="formatString"></span>
       <p>
         <vue-timepicker :format="formatString" v-model="playgroundData" :minute-interval="interval.minute" :second-interval="interval.second"
-                        :hide-clear-button="!enableClearBtn" :typeable="typeableBtn"/>
+                        :hide-clear-button="!enableClearBtn" />
       </p>
     </div>
 

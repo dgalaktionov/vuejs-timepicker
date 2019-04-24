@@ -47,7 +47,6 @@ export default {
     },
 
     disabled: { type: Boolean },
-    typeable: { type: Boolean, default: false },
 
     disabledValues: {
       type: Object,
@@ -203,6 +202,9 @@ export default {
         this.$emit('blur', {
           ...this.value
         })
+      } else {
+        // focus on the first select element
+        setTimeout(() => {this.$el.querySelector("select.hours").focus();}, 0);
       }
     },
 
@@ -215,19 +217,43 @@ export default {
 
       this.apm = this.apms[0]
       this.$emit('input', time)
+    },
+
+    isInsideComponent(el) {
+      while (el) {
+        if (el === this.$el) {
+          return true;
+        } else {
+          el = el.parentElement;
+        }
+      }
+
+      return false;
+    },
+
+    onLoseFocus(e) {
+      if (e.relatedTarget && !this.isInsideComponent(e.relatedTarget)) {
+        this.toggleDropdown();
+      }
+    },
+
+    onKeyDown(e) {
+      if (e && e.key === "Escape" && this.showDropdown) {
+          this.toggleDropdown();
+      }
     }
   }
 }
 </script>
 
 <template>
-<span class="time-picker">
-  <input class="display-time" :readonly="!disabled" :disabled="disabled" :value="displayTime" @click.stop="toggleDropdown" type="text" />
+<span class="time-picker" @keydown="onKeyDown">
+  <input class="display-time" :readonly="!disabled" :disabled="disabled" :value="displayTime" type="text" @focusin.stop="toggleDropdown" />
   <span class="clear-btn" v-if="!hideClearButton" v-show="!showDropdown && showClearBtn" @click.stop="clearTime">&times;</span>
   <div class="time-picker-overlay" v-if="showDropdown" @click.stop="toggleDropdown"></div>
-  <div class="dropdown" v-show="showDropdown">
+  <div class="dropdown" v-show="showDropdown" @focusout="onLoseFocus">
     <div class="select-list">
-      <select v-model="value[hourType]" @change="$emit('input', value)">
+      <select class="hours" v-model="value[hourType]" @change="$emit('input', value)">
         <option disabled v-text="hourType" value="" class="hint"></option>
         <option
                 v-for="hr in hours"
