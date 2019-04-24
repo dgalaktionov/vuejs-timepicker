@@ -232,7 +232,7 @@ export default {
     },
 
     onLoseFocus(e) {
-      if (e.relatedTarget && !this.isInsideComponent(e.relatedTarget)) {
+      if (this.showDropdown && e.relatedTarget && !this.isInsideComponent(e.relatedTarget)) {
         this.toggleDropdown();
       }
     },
